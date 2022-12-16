@@ -1,92 +1,66 @@
 #include <iostream>
-#include <string>
-#include <algorithm>
 
-void print_answer(const std::string &answer)
+bool valid_char(char a[3][3], int &x, int &o)
 {
-    std::cout << answer << std::endl;
-    exit(0);
-
-}
-
-void check_valid_chars(char &chip)
-{
-    if(!(chip == 'X' || chip == 'O' || chip == '.'))
-    {
-        print_answer(std::string("Incorrect. Only characters X, O and dot are allowed"));
-    }
-}
-
-void get_coordinate_point(int &step_x, int &step_y, const std::string *lines)
-{
-    if(lines[step_x].length() != 3)
-    {
-        print_answer(std::string("Incorrect. Length should be 3"));
-    }
-
-    char symbol_array[3];
-    int count(0);
-    for(auto symbol : lines[step_x])
-    {
-        symbol_array[count] += symbol;
-        count++;
-    }
-    char chip = symbol_array[step_y];
-
-    check_valid_chars(chip);
-
-
-
-}
-
-
-void find_winner(const std::string *lines)
-{
-/*    int step_x(0), step_y(0);*/
-    for(int i(0);i < 3; i++)
-    {
-        for(int step : )
+    for(int i = 0; i < 3; i++)
+        for(int j = 0; j < 3; j++)
         {
-            step++;
+            if(a[i][j] == 'X') x++;
+            else if(a[i][j] == 'O') o++;
+            else if(a[i][j] == '.') continue;
+            else return false;
         }
-    }
-
-
-/*     if(std::count(lines[i].begin(), lines[i].end(), 'X') == 3)
-       {
-           print_answer(std::string("Winner X!"));
-       }
-       else if(std::count(lines[i].begin(), lines[i].end(), 'O') == 3)
-       {
-           print_answer(std::string("Winner O!"));
-       }
-       else
-       {
-           print_answer(std::string("Winner no one!"));
-       }
-*/
-/*
-
-        for(auto chip : lines[i])
-        {
-            if(!(chip == 'X' || chip == 'O' || chip == '.'))
-            {
-                print_answer(std::string("Incorrect. Only characters X, O and dot are allowed"));
-            }
-        }
-*/
-
+    return true;
 }
 
+void result(const char &winner, const int &x, const int &o)
+{
+    if(winner == 'X')
+    {
+        if(o == x-1) std::cout << "X win.";
+        else std::cout << "Incorrect.";
+    }
+    else if(winner == 'O')
+    {
+        if(x == o-1) std::cout << "O win.";
+        else std::cout << "Incorrect.";
+    }
+    else
+    {
+        if(o > x) std::cout << "Incorrect.";
+        else if (o == x || o == x-1) std::cout << "No one win.";
+    }
+}
+
+char winner_check(char a[3][3], char &winner)
+{
+    for(int i = 0; i < 3; i++)
+    {
+        if((a[i][0] == a[i][1]) && (a[i][0] == a[i][2])) winner = a[i][0];
+        if((a[0][i] == a[1][i]) && (a[0][i] == a[2][i])) winner = a[0][i];
+    }
+    if((a[0][0] == a[1][1]) && (a[0][0] == a[2][2])) winner = a[1][1];
+    if((a[0][2] == a[1][1]) && (a[0][2] == a[2][0])) winner = a[1][1];
+    return winner;
+}
 int main()
 {
-    int step_x(0), step_y(0);
+    char a[3][3];
+    int x(0),o(0);
+    char winner = '.';
 
-    std::string lines[3];
-    std::cin >> lines[0] >> lines[1] >> lines[2];
+    for(auto & i : a)
+        for(char & j : i)
+            std::cin >> j;
 
-/*    check_horizontal_line(lines);
-    check_vertical_line(lines);*/
-    get_coordinate_point(step_x,step_y, lines);
-
+    if(!valid_char(a,x,o))
+    {
+        std::cout << "Incorrect.";
+        return 0;
+    }
+    else
+    {
+        winner_check(a,winner);
+        result(winner,x,o);
+    }
 }
