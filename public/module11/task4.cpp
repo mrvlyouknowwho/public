@@ -28,7 +28,7 @@ void result(const char &winner, const int &x, const int &o)
     else
     {
         if(o > x) std::cout << "Incorrect.";
-        else if (o == x || o == x-1) std::cout << "No one win.";
+        else if (o == x || o == x-1) std::cout << "Nobody.";
     }
 }
 
