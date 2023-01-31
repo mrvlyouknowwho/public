@@ -17,7 +17,7 @@ int main()
     int num = 0;
     while(num != -1)
     {
-        std::cout << "Please enter the robot ID:";
+        std::cout << "Please enter the robot ID: ";
         std::cin >> num;
 
         id = add(id, num);
